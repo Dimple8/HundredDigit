@@ -1,56 +1,56 @@
-// Р”РѕРїСѓСЃС‚РёРјС‹Рµ РѕРїРµСЂР°С†РёРё
+// Допустимые операции
 var operations = [{key: "+", value: 0}, {key: "-", value: 1}, {key: " ", value: 2}];
-// РљРѕР»РёС‡РµСЃС‚РІРѕ РїРѕРїС‹С‚РѕРє РїРѕРґР±РѕСЂР°
+// Количество попыток подбора
 var count = 0;
 
-// РџРѕРґР±РёСЂР°РµРј С‡РёСЃР»Рѕ 100
+// Подбираем число 100
 var result = getFormulaForHundredDigit(1);
 
-// Р’С‹РІРѕРґРёРј СЂРµР·СѓР»СЊС‚Р°С‚С‹ СЂРµС€РµРЅРёСЏ
-var out = "<font color='green'>Р РµС€РµРЅРёРµ:" + "<br>РџРѕРїС‹С‚РѕРє РїРѕРґР±РѕСЂР°: " + count;        
-out += "<br>Р¤РѕСЂРјСѓР»Р°: " + (stringResult).replace(/\s+/g, '') + " = " + result + "</font>";	
+// Выводим результаты решения
+var out = "<font color='green'>Решение:" + "<br>Попыток подбора: " + count;
+out += "<br>Формула: " + (stringResult).replace(/\s+/g, '') + " = " + result + "</font>";
 document.getElementById("output").innerHTML += out;
 
 function getFormulaForHundredDigit(result)
- {	 
-	 while (result != 100) {		
+ {
+	 while (result != 100) {
 		count++;		
 		result = 1;
 		stringResult = "1";
 		for (let i = 2; i < 10; i++) {
-			// РџРѕР»СѓС‡Р°РµРј СЃР»СѓС‡Р°Р№РЅСѓСЋ РѕРїРµСЂР°С†РёСЋ "+", "-", " "
+			// Получаем случайную операцию "+", "-", " "
 			random = getRandomInt(0, 2);
-			stringResult += operations[random].key + i;			
+			stringResult += operations[random].key + i;
 		}
-		result = getResultFromFormula(stringResult);		
+		result = getResultFromFormula(stringResult);
 		return getFormulaForHundredDigit(result);
 	 }
 	 return result;
  }
 
 function getResultFromFormula(stringResult) {
-	// РЈР±РёСЂР°РµРј РїСЂРѕР±РµР»С‹ РјРµР¶РґСѓ С†РёС„СЂР°РјРё
+	// Убираем пробелы между цифрами
 	stringResult = (stringResult).replace(/\s+/g, '');
-	
-	// РџРѕР»СѓС‡Р°РµРј РґРІСѓРјРµСЂРЅС‹Р№ РјР°СЃСЃРёРІ
-	var nums = stringResult.split("+");		
+
+	// Получаем двумерный массив
+	var nums = stringResult.split("+");
 	nums.forEach( function(value, i, nums) { nums[i] = nums[i].split("-"); } );
-			
-	// РџСЂРµРѕР±СЂР°Р·СѓРµРј РІ РѕРґРЅРѕРјРµСЂРЅС‹Р№ РјР°СЃСЃРёРІ, РєР°Р¶РґС‹Р№ СЌР»РµРјРµРЅС‚ РєРѕС‚РѕСЂРѕРіРѕ СЂР°Р·РЅРѕСЃС‚СЊ СЌР»РµРјРµРЅС‚РѕРІ РґРІСѓРјРµСЂРЅРѕРіРѕ РјР°СЃСЃРёРІР°		
+
+	// Преобразуем в одномерный массив, каждый элемент которого разность элементов двумерного массива
 	for(var i = 0; i < nums.length; i++){
 		for(var j = 0; j < nums[i].length; j++){
-			var razn = nums[i].reduce((x, y) => +x - +y);	        
+			var razn = nums[i].reduce((x, y) => +x - +y);
 		}
-		nums[i] = razn;			
+		nums[i] = razn;
 	}
-	// РЎРєР»Р°РґС‹РІР°РµРј РІСЃРµ СЌР»РµРјРµРЅС‚С‹ РјР°СЃСЃРёРІР°
-	var result = nums.reduce((x, y) => +x + +y);	
+	// Складываем все элементы массива
+	var result = nums.reduce((x, y) => +x + +y);
 	return result;
 }
- 
+
 /**
  * Get a random integer between `min` and `max`.
- * 
+ *
  * @param {number} min - min number
  * @param {number} max - max number
  * @return {int} a random integer
